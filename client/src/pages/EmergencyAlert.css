@@ -1,0 +1,163 @@
+.emergency-page {
+  color: white;
+  display: flex;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.emergency-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.emergency-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.emergency-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.emergency-header h1 {
+  color: #e74c3c;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.emergency-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.quick-options {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #fff9e6;
+  border-radius: 12px;
+  border: 2px solid #f39c12;
+}
+
+.quick-options h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.quick-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.quick-option-btn {
+  padding: 12px 16px;
+  background: white;
+  border: 2px solid #f39c12;
+  border-radius: 8px;
+  color: #f39c12;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quick-option-btn:hover {
+  background: #f39c12;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.emergency-form {
+  margin-top: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.emergency-submit {
+  font-size: 1.1rem;
+  padding: 15px 30px;
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #c3e6cb;
+  font-weight: 600;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #fcc;
+}
+
+.emergency-info {
+  margin-top: 30px;
+  padding: 15px;
+  background: #e8f4f8;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.emergency-info p {
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .emergency-container {
+    padding: 30px 20px;
+  }
+
+  .emergency-header h1 {
+    font-size: 2rem;
+  }
+
+  .emergency-icon {
+    font-size: 3rem;
+  }
+
+  .quick-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+

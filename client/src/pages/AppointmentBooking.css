@@ -1,0 +1,237 @@
+.appointment-booking-page {
+  color: #333;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.appointment-booking-container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.form-header h1 {
+  color: #0f4c75;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.appointment-booking-form {
+  margin-top: 30px;
+}
+
+.form-section {
+  margin-bottom: 30px;
+}
+
+.form-section h3 {
+  color: #0f4c75;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.problems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.problem-card {
+  padding: 25px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.problem-card:hover {
+  border-color: #3282b8;
+  background: #f0f7ff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(50, 130, 184, 0.2);
+}
+
+.problem-card.selected {
+  background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
+  color: white;
+  border-color: #3282b8;
+  box-shadow: 0 6px 25px rgba(15, 76, 117, 0.3);
+}
+
+.problem-icon {
+  font-size: 2.5rem;
+  margin-bottom: 5px;
+}
+
+.problem-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.problem-desc {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.selected-problem {
+  background: #d4edda;
+  color: #155724;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+.severity-options {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.severity-option {
+  flex: 1;
+  min-width: 120px;
+  cursor: pointer;
+}
+
+.severity-option input[type="radio"] {
+  display: none;
+}
+
+.severity-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  background: white;
+  font-weight: 600;
+  color: #333;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.severity-option input[type="radio"]:checked + .severity-label {
+  background: #f0f7ff;
+  border-width: 3px;
+  transform: scale(1.05);
+}
+
+.severity-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #0f4c75;
+  font-size: 1rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3282b8;
+  box-shadow: 0 0 0 3px rgba(50, 130, 184, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  border-left: 4px solid #e74c3c;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .appointment-booking-container {
+    padding: 25px 20px;
+  }
+
+  .form-header h1 {
+    font-size: 2rem;
+  }
+
+  .problems-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .severity-options {
+    flex-direction: column;
+  }
+
+  .severity-option {
+    min-width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
