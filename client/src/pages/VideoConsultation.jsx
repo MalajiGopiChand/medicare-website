@@ -100,50 +100,84 @@ const VideoConsultation = () => {
 
   const handleUserJoined = async () => {
     const peer = peerRef.current;
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    if (socket) {
-      socket.emit('offer', { offer, roomId });
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    try {
+      const offer = await peer.createOffer();
+      await peer.setLocalDescription(offer);
+      if (socket) {
+        socket.emit('offer', { offer, roomId });
+      }
+    } catch (error) {
+      console.error('Error creating offer:', error);
     }
   };
 
   const handleOffer = async ({ offer }) => {
     const peer = peerRef.current;
-    await peer.setRemoteDescription(new RTCSessionDescription(offer));
-    const answer = await peer.createAnswer();
-    await peer.setLocalDescription(answer);
-    if (socket) {
-      socket.emit('answer', { answer, roomId });
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    try {
+      await peer.setRemoteDescription(new RTCSessionDescription(offer));
+      const answer = await peer.createAnswer();
+      await peer.setLocalDescription(answer);
+      if (socket) {
+        socket.emit('answer', { answer, roomId });
+      }
+    } catch (error) {
+      console.error('Error handling offer:', error);
     }
   };
 
   const handleAnswer = async ({ answer }) => {
     const peer = peerRef.current;
-    await peer.setRemoteDescription(new RTCSessionDescription(answer));
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    try {
+      await peer.setRemoteDescription(new RTCSessionDescription(answer));
+    } catch (error) {
+      console.error('Error handling answer:', error);
+    }
   };
 
   const handleIceCandidate = async ({ candidate }) => {
     const peer = peerRef.current;
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
     if (candidate) {
-      await peer.addIceCandidate(new RTCIceCandidate(candidate));
+      try {
+        await peer.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (error) {
+        console.error('Error adding ICE candidate:', error);
+      }
     }
   };
 
   const toggleMute = () => {
     if (streamRef.current) {
+      const newMutedState = !isMuted;
       streamRef.current.getAudioTracks().forEach(track => {
-        track.enabled = isMuted;
+        track.enabled = !newMutedState; // Enable track when not muted
       });
-      setIsMuted(!isMuted);
+      setIsMuted(newMutedState);
     }
   };
 
   const toggleVideo = () => {
     if (streamRef.current) {
+      const newVideoOffState = !isVideoOff;
       streamRef.current.getVideoTracks().forEach(track => {
-        track.enabled = isVideoOff;
+        track.enabled = !newVideoOffState; // Enable track when video is on
       });
-      setIsVideoOff(!isVideoOff);
+      setIsVideoOff(newVideoOffState);
     }
   };
 

@@ -37,8 +37,10 @@ const ChatBot = () => {
   };
 
   const recordMedicine = (medicineName, dosage = '', frequency = '') => {
+    // Generate unique ID using timestamp + random number to avoid collisions
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newMedicine = {
-      id: Date.now(),
+      id: uniqueId,
       name: medicineName,
       dosage,
       frequency,
@@ -273,8 +275,10 @@ const ChatBot = () => {
   };
 
   const addMessage = (sender, text) => {
+    // Generate unique ID using timestamp + random number to avoid collisions
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newMessage = {
-      id: Date.now(),
+      id: uniqueId,
       sender,
       text,
       timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
