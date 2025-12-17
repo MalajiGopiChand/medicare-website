@@ -65,6 +65,20 @@ export const AuthProvider = ({ children }) => {
     return user;
   };
 
+  const loginWithOTP = async (phone, otp, name, email) => {
+    const response = await axios.post('http://localhost:5000/api/auth/verify-otp', {
+      phone,
+      otp,
+      ...(name && email && { name, email })
+    });
+    
+    const { token, user } = response.data;
+    localStorage.setItem('token', token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setUser(user);
+    return user;
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
@@ -79,6 +93,7 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     register,
+    loginWithOTP,
     logout,
     updateUser,
     loading

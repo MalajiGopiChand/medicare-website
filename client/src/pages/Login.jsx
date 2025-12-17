@@ -70,6 +70,9 @@ const Login = () => {
           <p>
             Don't have an account? <Link to="/register">Register here</Link>
           </p>
+          <p style={{ marginTop: '12px' }}>
+            Or <Link to="/otp-login">Login with OTP</Link>
+          </p>
         </div>
       </div>
     </div>

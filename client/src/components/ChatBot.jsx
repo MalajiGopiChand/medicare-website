@@ -48,8 +48,23 @@ const ChatBot = () => {
     return `✅ I've recorded "${medicineName}"${dosage ? ` (${dosage})` : ''}${frequency ? ` - ${frequency}` : ''} in your medicine list.\n\nYou can view all recorded medicines anytime by asking "show my medicines" or "list medicines".`;
   };
 
-  const getAIResponse = (userMessage) => {
+  const getAIResponse = async (userMessage) => {
     const message = userMessage.toLowerCase().trim();
+    
+    // Symptom checker
+    if (message.includes('symptom') || message.includes('check symptom') || message.includes('i have')) {
+      const symptoms = extractSymptoms(message);
+      if (symptoms.length > 0) {
+        return suggestDoctor(symptoms);
+      }
+      return `I can help you check symptoms! 🤒\n\nPlease describe your symptoms. For example:\n• "I have fever and headache"\n• "Check symptoms: cough, chest pain"\n• "I'm experiencing nausea and dizziness"\n\nBased on your symptoms, I can suggest which doctor to consult.`;
+    }
+    
+    // Doctor suggestion
+    if (message.includes('doctor') && (message.includes('suggest') || message.includes('recommend') || message.includes('which'))) {
+      const symptoms = extractSymptoms(message);
+      return suggestDoctor(symptoms);
+    }
     
     // Show recorded medicines
     if (message.includes('show my medicines') || message.includes('list medicines') || message.includes('my medicines') || message.includes('recorded medicines')) {
@@ -164,6 +179,70 @@ const ChatBot = () => {
     return generateIntelligentResponse(message);
   };
 
+  const extractSymptoms = (message) => {
+    const symptomKeywords = [
+      'fever', 'headache', 'cough', 'cold', 'sore throat', 'chest pain',
+      'stomach pain', 'nausea', 'vomiting', 'dizziness', 'fatigue',
+      'joint pain', 'back pain', 'rash', 'itchy', 'swelling',
+      'difficulty breathing', 'shortness of breath', 'wheezing',
+      'diarrhea', 'constipation', 'bloating', 'heartburn',
+      'eye pain', 'vision problems', 'ear pain', 'hearing loss',
+      'tooth pain', 'gum bleeding', 'skin rash', 'acne',
+      'anxiety', 'depression', 'insomnia', 'memory loss'
+    ];
+    
+    const foundSymptoms = [];
+    symptomKeywords.forEach(symptom => {
+      if (message.includes(symptom)) {
+        foundSymptoms.push(symptom);
+      }
+    });
+    
+    return foundSymptoms;
+  };
+
+  const suggestDoctor = (symptoms) => {
+    const doctorMapping = {
+      'fever': 'General Physician or Internal Medicine',
+      'headache': 'Neurologist or General Physician',
+      'cough': 'Pulmonologist or General Physician',
+      'chest pain': 'Cardiologist (URGENT)',
+      'difficulty breathing': 'Pulmonologist (URGENT)',
+      'stomach pain': 'Gastroenterologist',
+      'nausea': 'Gastroenterologist or General Physician',
+      'joint pain': 'Rheumatologist or Orthopedist',
+      'back pain': 'Orthopedist or Neurologist',
+      'rash': 'Dermatologist',
+      'eye pain': 'Ophthalmologist',
+      'tooth pain': 'Dentist',
+      'anxiety': 'Psychiatrist or Psychologist',
+      'skin rash': 'Dermatologist'
+    };
+    
+    let suggestions = '👨‍⚕️ **Doctor Recommendation:**\n\n';
+    
+    if (symptoms.length === 0) {
+      return `Please describe your symptoms so I can suggest the right doctor.\n\nCommon symptoms:\n• Fever, cough, cold\n• Headache, dizziness\n• Stomach pain, nausea\n• Joint pain, back pain\n• Skin issues, rashes\n• Eye or ear problems`;
+    }
+    
+    const suggestedDoctors = new Set();
+    symptoms.forEach(symptom => {
+      const doctor = doctorMapping[symptom] || 'General Physician';
+      suggestedDoctors.add(doctor);
+    });
+    
+    suggestions += `Based on your symptoms: ${symptoms.join(', ')}\n\n`;
+    suggestions += `**Recommended Doctor:** ${Array.from(suggestedDoctors).join(' or ')}\n\n`;
+    
+    if (symptoms.some(s => ['chest pain', 'difficulty breathing'].includes(s))) {
+      suggestions += `⚠️ **URGENT:** Please seek immediate medical attention or visit emergency department.\n\n`;
+    }
+    
+    suggestions += `Would you like to book an appointment with a ${Array.from(suggestedDoctors)[0]}?`;
+    
+    return suggestions;
+  };
+
   const generateIntelligentResponse = (message) => {
     // Check for common healthcare keywords
     const healthcareKeywords = {
@@ -213,10 +292,15 @@ const ChatBot = () => {
     setIsTyping(true);
 
     // Simulate AI thinking time
-    setTimeout(() => {
-      const response = getAIResponse(userMessage);
-      addMessage('bot', response);
-      setIsTyping(false);
+    setTimeout(async () => {
+      try {
+        const response = await getAIResponse(userMessage);
+        addMessage('bot', response);
+      } catch (error) {
+        addMessage('bot', 'I apologize, but I encountered an error. Please try again.');
+      } finally {
+        setIsTyping(false);
+      }
     }, 1000 + Math.random() * 1000);
   };
 

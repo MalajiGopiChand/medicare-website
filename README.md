@@ -1,219 +1,400 @@
-# Healthcare Assistant Application
+# 🏥 Hospital Management System
 
-A comprehensive healthcare assistant application providing ointment booking and emergency alerts with a modern, responsive UI. Built with React.js, Node.js, Express.js, and MongoDB.
+A comprehensive, production-ready Hospital Management System built with modern web technologies. This system provides complete healthcare management solutions for patients, doctors, admins, lab technicians, pharmacists, dieticians, and housekeeping staff.
 
-## Features
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)
 
-- 🔐 **User Authentication** - Secure login and registration system
-- 📅 **Ointment Booking** - Schedule and manage healthcare appointments
-- 🚨 **Emergency Alerts** - Send and receive emergency notifications
-- 🔔 **Notifications System** - Real-time alerts and appointment reminders
-- 📱 **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
-- 🎨 **Modern UI/UX** - Beautiful, user-friendly interface with smooth animations
+## ✨ Features
 
-## Tech Stack
+### 🔐 Authentication & Security
+- **OTP-based Registration/Login** - Secure phone number verification
+- **JWT Authentication** - Token-based secure sessions
+- **Role-based Access Control** - 7 different user roles
+- **Password Hashing** - Bcrypt encryption
+- **2FA Ready** - Two-factor authentication support
+
+### 👥 User Roles
+1. **👨‍⚕️ Doctor** - Appointment management, prescriptions, patient history
+2. **🧑‍⚕️ Patient** - Booking, reports, payments, video consultation
+3. **🧑‍💼 Admin** - Staff management, analytics, billing, bed allocation
+4. **🧑‍🔬 Lab** - Test requests, report uploads, notifications
+5. **💊 Pharmacy** - Stock management, prescriptions, billing
+6. **🥗 Dietician** - Diet plans, recommendations
+7. **🧹 Housekeeping** - Service tickets, room requests
+
+### 🚀 Core Features
+
+#### Patient Module
+- ✅ OTP-based registration & login
+- ✅ Online appointment booking with payment
+- ✅ Appointment history & management
+- ✅ Digital prescriptions (PDF download)
+- ✅ Lab report downloads
+- ✅ Medical history timeline
+- ✅ Emergency contact management
+- ✅ Video consultation (WebRTC)
+- ✅ Payments & invoices
+
+#### Doctor Module
+- ✅ Appointment management dashboard
+- ✅ Working hours & holiday calendar
+- ✅ Consultation fee setup
+- ✅ Patient case sheets
+- ✅ E-prescription (AI-assisted)
+- ✅ Upload medical reports
+- ✅ Leave management
+- ✅ Patient reviews & ratings
+- ✅ Video consultation
+
+#### Admin Module
+- ✅ Doctor & staff management
+- ✅ Department & specialization setup
+- ✅ Bed & ward allocation
+- ✅ Billing & invoice management
+- ✅ Complaint management
+- ✅ Hospital analytics dashboard
+- ✅ Role & permission control
+
+#### Lab Module
+- ✅ Test assignment from doctors
+- ✅ Upload lab reports (PDF)
+- ✅ Status tracking
+- ✅ Auto-notify patients via Email & SMS
+
+#### Pharmacy Module
+- ✅ View prescriptions
+- ✅ Medicine stock management
+- ✅ Medicine purchase billing
+- ✅ Invoice generation
+
+#### Dietician Module
+- ✅ Food menu selection
+- ✅ Dietician recommendations
+- ✅ Diet plans linked to diseases
+
+#### Housekeeping Module
+- ✅ Housekeeping requests
+- ✅ Room service tickets
+- ✅ Status updates
+
+### 🧠 AI Features
+- **Disease Risk Prediction** - Rule-based AI for health risk assessment
+- **Symptom Checker** - Intelligent symptom analysis
+- **Doctor Suggestion** - AI-powered doctor recommendations
+- **AI Chatbot** - 24×7 healthcare assistant
+- **SOAP Note Generator** - Automated medical documentation
+- **Voice-to-Text** - Prescription voice input (ready for API integration)
+
+### 💳 Payment System
+- **Razorpay Integration** - Primary payment gateway
+- **Stripe Integration** - International payments
+- **Webhook Verification** - Secure payment confirmation
+- **GST-compliant Invoices** - Professional invoice generation
+- **PDF Downloads** - Download invoices & prescriptions
+
+### 📹 Video Consultation
+- **WebRTC-based** - Real-time video calling
+- **Appointment-linked** - Secure session management
+- **Call Duration Tracking** - Automatic logging
+- **Mute/Unmute Controls** - Full call controls
+
+### 🔔 Notifications
+- **Real-time** - Socket.io powered
+- **Email Notifications** - Nodemailer integration
+- **SMS Notifications** - Twilio integration
+- **Appointment Reminders** - Automated alerts
+- **Lab Report Alerts** - Instant notifications
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- React.js 19
-- React Router DOM
-- Axios for API calls
-- CSS3 with modern styling
+- **React.js 19** - Modern UI library
+- **React Router DOM 7** - Client-side routing
+- **Tailwind CSS** - Utility-first CSS
+- **Framer Motion** - Smooth animations
+- **Recharts** - Data visualization
+- **Axios** - HTTP client
+- **Socket.io Client** - Real-time communication
 
 ### Backend
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT Authentication
-- Bcrypt for password hashing
-- Node-cron for background scheduling
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **JWT** - Authentication
+- **Socket.io** - Real-time server
+- **PDFKit** - PDF generation
+- **Multer** - File uploads
+- **Cloudinary** - Cloud storage
 
-## Prerequisites
+### Integrations
+- **Razorpay** - Payment gateway
+- **Stripe** - Payment gateway
+- **Twilio** - SMS service
+- **Nodemailer** - Email service
+- **Cloudinary** - File storage
+- **AWS S3** - Alternative storage
 
-- Node.js (v14 or higher)
-- MongoDB (local installation or MongoDB Atlas)
+## 📦 Installation
+
+### Prerequisites
+- Node.js (v16 or higher)
+- MongoDB (local or Atlas)
 - npm or yarn
 
-## Installation
-
-1. **Clone the repository**
-   ```bash
-   cd hospa
-   ```
-
-2. **Install backend dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Install frontend dependencies**
-   ```bash
-   cd client
-   npm install
-   cd ..
-   ```
-
-4. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   MONGODB_URI=mongodb://localhost:27017/healthcare
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-   PORT=5000
-   ```
-
-5. **Start MongoDB**
-   
-   Make sure MongoDB is running on your system. If using MongoDB Atlas, update the `MONGODB_URI` in `.env`.
-
-## Running the Application
-
-### Option 1: Run both servers together (Recommended)
+### Step 1: Clone Repository
 ```bash
+git clone <repository-url>
+cd hospa
+```
+
+### Step 2: Install Dependencies
+```bash
+# Install root dependencies
+npm install
+
+# Install client dependencies
+cd client
+npm install
+cd ..
+```
+
+### Step 3: Environment Setup
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit .env with your credentials
+# Required: MONGODB_URI, JWT_SECRET
+# Optional: Email, SMS, Payment gateways, Cloudinary
+```
+
+### Step 4: Start MongoDB
+```bash
+# Local MongoDB
+mongod
+
+# Or use MongoDB Atlas (cloud)
+# Update MONGODB_URI in .env
+```
+
+### Step 5: Run Application
+```bash
+# Development mode (runs both server and client)
 npm run dev
-```
 
-This will start both the backend (port 5000) and frontend (port 3000) concurrently.
-
-### Option 2: Run servers separately
-
-**Terminal 1 - Backend:**
-```bash
+# Or run separately:
+# Terminal 1 - Backend
 npm run server
-```
 
-**Terminal 2 - Frontend:**
-```bash
+# Terminal 2 - Frontend  
 npm run client
 ```
 
-## Usage
+### Step 6: Access Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **Health Check**: http://localhost:5000/api/health
 
-1. **Register a new account**
-   - Navigate to `http://localhost:3000/register`
-   - Fill in your details (name, email, phone, password)
-   - Click "Register"
+## 🔧 Configuration
 
-2. **Login**
-   - Navigate to `http://localhost:3000/login`
-   - Enter your email and password
-   - Click "Login"
+### Environment Variables
 
-3. **Book an Appointment**
-   - Click on "Bookings" in the navigation
-   - Click "New Booking"
-   - Fill in the appointment details
-   - Submit the form
+See `.env.example` for all available options. Key variables:
 
-4. **Send Emergency Alert**
-   - Click on "Emergency" in the navigation
-   - Fill in the emergency details or use quick options
-   - Click "Send Emergency Alert"
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
 
-5. **View Alerts**
-   - Click on "Alerts" in the navigation
-   - View all your alerts and notifications
-   - Mark alerts as read or delete them
+# Database
+MONGODB_URI=mongodb://localhost:27017/healthcare
 
-## API Endpoints
+# Security
+JWT_SECRET=your-super-secret-key-change-in-production
+
+# Email (Nodemailer)
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+
+# SMS (Twilio)
+TWILIO_ACCOUNT_SID=your-account-sid
+TWILIO_AUTH_TOKEN=your-auth-token
+TWILIO_PHONE_NUMBER=+1234567890
+
+# Payments
+RAZORPAY_KEY_ID=your-key-id
+RAZORPAY_KEY_SECRET=your-key-secret
+STRIPE_SECRET_KEY=your-stripe-key
+
+# Storage
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+```
+
+## 📚 API Documentation
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user (protected)
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login with email/password
+- `POST /api/auth/send-otp` - Send OTP to phone
+- `POST /api/auth/verify-otp` - Verify OTP and login
+- `GET /api/auth/me` - Get current user
 
-### Bookings
-- `GET /api/bookings` - Get all bookings (protected)
-- `GET /api/bookings/:id` - Get single booking (protected)
-- `POST /api/bookings` - Create new booking (protected)
-- `PUT /api/bookings/:id` - Update booking (protected)
-- `DELETE /api/bookings/:id` - Delete booking (protected)
+### Appointments
+- `GET /api/appointments` - List appointments
+- `POST /api/appointments` - Create appointment
+- `GET /api/appointments/:id` - Get appointment details
+- `PUT /api/appointments/:id/status` - Update status
+- `POST /api/appointments/:id/video/start` - Start video call
+- `POST /api/appointments/:id/video/end` - End video call
 
-### Alerts
-- `GET /api/alerts` - Get all alerts (protected)
-- `GET /api/alerts/unread/count` - Get unread alerts count (protected)
-- `POST /api/alerts/emergency` - Create emergency alert (protected)
-- `PUT /api/alerts/:id/read` - Mark alert as read (protected)
-- `PUT /api/alerts/read-all` - Mark all alerts as read (protected)
-- `DELETE /api/alerts/:id` - Delete alert (protected)
+### Payments
+- `POST /api/payments/create-order` - Create payment order
+- `POST /api/payments/verify` - Verify payment
+- `POST /api/payments/webhook` - Payment webhook
 
-### Notifications
-- `GET /api/notifications` - Get notifications and upcoming appointments (protected)
+### Lab
+- `GET /api/lab` - Get lab reports
+- `POST /api/lab` - Create test request
+- `PUT /api/lab/:id` - Update report
 
-## Project Structure
+### Pharmacy
+- `GET /api/pharmacy/medicines` - Get medicines
+- `GET /api/pharmacy/prescriptions` - Get prescriptions
+- `POST /api/pharmacy/purchase` - Create purchase
+
+### Admin
+- `GET /api/admin/staff` - Get staff
+- `GET /api/admin/analytics` - Get analytics
+- `GET /api/admin/beds` - Get beds
+
+### AI
+- `POST /api/ai/disease-risk` - Disease risk prediction
+- `POST /api/ai/soap-notes` - Generate SOAP notes
+
+## 🎨 UI/UX Features
+
+- ✅ **Responsive Design** - Mobile-first approach
+- ✅ **Dark/Light Mode** - Theme switcher
+- ✅ **Smooth Animations** - Framer Motion
+- ✅ **Dashboard Charts** - Recharts integration
+- ✅ **Loading States** - Professional loading indicators
+- ✅ **Error Handling** - User-friendly error messages
+- ✅ **Accessibility** - WCAG compliant
+
+## 📱 Mobile Ready
+
+- Responsive components
+- Touch-friendly UI
+- WebView compatible
+- React Native ready
+- Optimized performance
+
+## 🚀 Production Deployment
+
+### Build Frontend
+```bash
+cd client
+npm run build
+```
+
+### Deploy Backend
+- Deploy to Heroku, AWS, DigitalOcean, etc.
+- Set environment variables
+- Configure MongoDB Atlas
+- Set up payment gateway webhooks
+
+### Deploy Frontend
+- Deploy to Netlify, Vercel, AWS S3, etc.
+- Configure API endpoints
+- Enable HTTPS
+
+## 🧪 Testing
+
+```bash
+# Run tests (when implemented)
+npm test
+
+# Test API endpoints
+# Use Postman or similar tool
+```
+
+## 📝 Project Structure
 
 ```
 hospa/
-├── server/
-│   ├── index.js              # Express server setup
-│   ├── models/               # MongoDB models
-│   │   ├── User.js
-│   │   ├── Booking.js
-│   │   └── Alert.js
-│   ├── routes/               # API routes
-│   │   ├── auth.js
-│   │   ├── bookings.js
-│   │   ├── alerts.js
-│   │   └── notifications.js
-│   └── middleware/
-│       └── auth.js           # JWT authentication middleware
-├── client/
-│   ├── public/
+├── server/                 # Backend
+│   ├── index.js           # Main server
+│   ├── models/            # MongoDB schemas
+│   ├── routes/            # API routes
+│   ├── middleware/        # Auth & validation
+│   └── utils/             # Helper functions
+├── client/                # Frontend
 │   ├── src/
-│   │   ├── components/       # React components
-│   │   │   └── Layout.js
-│   │   ├── context/          # React context
-│   │   │   └── AuthContext.js
-│   │   ├── pages/            # Page components
-│   │   │   ├── Login.js
-│   │   │   ├── Register.js
-│   │   │   ├── Dashboard.js
-│   │   │   ├── Bookings.js
-│   │   │   ├── BookingForm.js
-│   │   │   ├── Alerts.js
-│   │   │   └── EmergencyAlert.js
-│   │   ├── App.js
-│   │   └── index.js
-│   └── package.json
-├── package.json
-└── README.md
+│   │   ├── components/    # React components
+│   │   ├── pages/         # Page components
+│   │   ├── context/       # React contexts
+│   │   └── App.jsx        # Main app
+│   └── public/            # Static files
+├── .env.example           # Environment template
+├── SETUP_GUIDE.md        # Detailed setup guide
+└── README.md             # This file
 ```
 
-## Features in Detail
+## 🤝 Contributing
 
-### Background Scheduling
-The application uses `node-cron` to check for upcoming appointments every 15 minutes and automatically creates notifications for appointments within the next 15 minutes.
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
 
-### Security
-- Passwords are hashed using bcrypt
-- JWT tokens for authentication
-- Protected API routes
-- Secure data storage in MongoDB
+## 📄 License
 
-### Responsive Design
-- Mobile-first approach
-- Works on all screen sizes
-- Touch-friendly interface
-- Optimized for Android and iOS devices
+This project is licensed under the MIT License.
 
-## Troubleshooting
+## 🆘 Support
 
-### MongoDB Connection Issues
-- Ensure MongoDB is running: `mongod` or check MongoDB Atlas connection string
-- Verify the `MONGODB_URI` in `.env` is correct
+For issues or questions:
+1. Check `SETUP_GUIDE.md` for setup help
+2. Review server logs
+3. Check browser console
+4. Verify environment variables
 
-### Port Already in Use
-- Change the `PORT` in `.env` for backend
-- React app runs on port 3000 by default (change in `client/package.json` if needed)
+## ✅ Features Checklist
 
-### CORS Issues
-- CORS is enabled for all origins in development
-- Update CORS settings in `server/index.js` for production
+- [x] OTP Authentication
+- [x] Role-based Dashboards
+- [x] Appointment Booking
+- [x] Video Consultation
+- [x] AI Features
+- [x] Payment Integration
+- [x] Invoice Generation
+- [x] Lab Module
+- [x] Pharmacy Module
+- [x] Admin Module
+- [x] Real-time Notifications
+- [x] File Uploads
+- [x] PDF Generation
+- [x] Dark/Light Mode
+- [x] Responsive Design
 
-## License
+## 🎯 Future Enhancements
 
-This project is open source and available for educational purposes.
+- [ ] Advanced AI with OpenAI
+- [ ] Mobile App (React Native)
+- [ ] Multi-language Support
+- [ ] Advanced Analytics
+- [ ] Telemedicine Features
+- [ ] Integration with Medical Devices
 
-## Support
+---
 
-For issues or questions, please check the code comments or create an issue in the repository.
+**Built with ❤️ for healthcare management**
 
+For detailed setup instructions, see [SETUP_GUIDE.md](./SETUP_GUIDE.md)
