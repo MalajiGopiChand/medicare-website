@@ -5,7 +5,7 @@ A comprehensive healthcare assistant application providing ointment booking and 
 ## Features
 
 - 🔐 **User Authentication** - Secure login and registration system
-- 📅 **Ointment Booking** - Schedule and manage healthcare appointments
+- 📅 **Appointments Booking** - Schedule and manage healthcare appointments
 - 🚨 **Emergency Alerts** - Send and receive emergency notifications
 - 🔔 **Notifications System** - Real-time alerts and appointment reminders
 - 📱 **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
