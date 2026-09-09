@@ -38,6 +38,8 @@ const Profile = () => {
 
   useEffect(() => {
     fetchProfileData();
+    const intervalId = setInterval(fetchProfileData, 30000);
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {

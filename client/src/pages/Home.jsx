@@ -71,7 +71,7 @@ const Home = () => {
       <nav className="home-nav">
         <div className="home-nav-container">
           <div className="home-nav-brand">
-            <h2>🏥 Healthcare Assistant</h2>
+            <h2>🏥 Healthcare </h2>
           </div>
           <div className="home-nav-links">
             <Link to="/login" className="nav-link-btn">Sign In</Link>

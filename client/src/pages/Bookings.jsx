@@ -10,6 +10,8 @@ const Bookings = () => {
 
   useEffect(() => {
     fetchBookings();
+    const intervalId = setInterval(fetchBookings, 30000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchBookings = async () => {

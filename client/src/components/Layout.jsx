@@ -103,13 +103,19 @@ const Layout = () => {
             ))}
             <button
               className={`nav-link ${isActive('/dashboard/doctors') ? 'active' : ''}`}
-              onClick={() => navigate('/dashboard/doctors')}
+              onClick={() => {
+                navigate('/dashboard/doctors');
+                setIsMobileMenuOpen(false);
+              }}
             >
               👨‍⚕️ Doctors
             </button>
             <button
               className={`nav-link emergency ${isActive('/dashboard/emergency') ? 'active' : ''}`}
-              onClick={() => navigate('/dashboard/emergency')}
+              onClick={() => {
+                navigate('/dashboard/emergency');
+                setIsMobileMenuOpen(false);
+              }}
             >
               🚨 Emergency
             </button>

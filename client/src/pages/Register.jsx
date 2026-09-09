@@ -110,6 +110,9 @@ const Register = () => {
           <p>
             Already have an account? <Link to="/login">Login here</Link>
           </p>
+          <p style={{ marginTop: '12px' }}>
+            Or <Link to="/otp-login">Register with OTP</Link>
+          </p>
         </div>
       </div>
     </div>

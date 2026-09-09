@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -23,6 +23,7 @@ const VideoConsultation = () => {
   const peerRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
+  const roomIdRef = useRef(null);
 
   useEffect(() => {
     fetchAppointment();
@@ -37,11 +38,76 @@ const VideoConsultation = () => {
       setAppointment(res.data);
       if (res.data.videoRoomId) {
         setRoomId(res.data.videoRoomId);
+        roomIdRef.current = res.data.videoRoomId;
       }
     } catch (error) {
       console.error('Error fetching appointment:', error);
     }
   };
+
+  // Define handlers with useCallback to ensure stable references for socket.off()
+  const handleUserJoined = useCallback(async () => {
+    const peer = peerRef.current;
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    try {
+      const offer = await peer.createOffer();
+      await peer.setLocalDescription(offer);
+      if (socket) {
+        socket.emit('offer', { offer, roomId: roomIdRef.current });
+      }
+    } catch (error) {
+      console.error('Error creating offer:', error);
+    }
+  }, [socket]);
+
+  const handleOffer = useCallback(async ({ offer }) => {
+    const peer = peerRef.current;
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    try {
+      await peer.setRemoteDescription(new RTCSessionDescription(offer));
+      const answer = await peer.createAnswer();
+      await peer.setLocalDescription(answer);
+      if (socket) {
+        socket.emit('answer', { answer, roomId: roomIdRef.current });
+      }
+    } catch (error) {
+      console.error('Error handling offer:', error);
+    }
+  }, [socket]);
+
+  const handleAnswer = useCallback(async ({ answer }) => {
+    const peer = peerRef.current;
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    try {
+      await peer.setRemoteDescription(new RTCSessionDescription(answer));
+    } catch (error) {
+      console.error('Error handling answer:', error);
+    }
+  }, []);
+
+  const handleIceCandidate = useCallback(async ({ candidate }) => {
+    const peer = peerRef.current;
+    if (!peer) {
+      console.error('Peer connection not initialized');
+      return;
+    }
+    if (candidate) {
+      try {
+        await peer.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (error) {
+        console.error('Error adding ICE candidate:', error);
+      }
+    }
+  }, []);
 
   const startCall = async () => {
     try {
@@ -58,7 +124,9 @@ const VideoConsultation = () => {
 
       // Start video session
       const res = await axios.post(`http://localhost:5000/api/appointments/${appointmentId}/video/start`);
-      setRoomId(res.data.roomId);
+      const currentRoomId = res.data.roomId;
+      setRoomId(currentRoomId);
+      roomIdRef.current = currentRoomId;
       
       // Initialize WebRTC peer connection
       const peer = new RTCPeerConnection({
@@ -86,7 +154,7 @@ const VideoConsultation = () => {
 
       // Join socket room
       if (socket) {
-        socket.emit('join-video-room', res.data.roomId);
+        socket.emit('join-video-room', currentRoomId);
         socket.on('user-joined', handleUserJoined);
         socket.on('offer', handleOffer);
         socket.on('answer', handleAnswer);
@@ -98,68 +166,6 @@ const VideoConsultation = () => {
     }
   };
 
-  const handleUserJoined = async () => {
-    const peer = peerRef.current;
-    if (!peer) {
-      console.error('Peer connection not initialized');
-      return;
-    }
-    try {
-      const offer = await peer.createOffer();
-      await peer.setLocalDescription(offer);
-      if (socket) {
-        socket.emit('offer', { offer, roomId });
-      }
-    } catch (error) {
-      console.error('Error creating offer:', error);
-    }
-  };
-
-  const handleOffer = async ({ offer }) => {
-    const peer = peerRef.current;
-    if (!peer) {
-      console.error('Peer connection not initialized');
-      return;
-    }
-    try {
-      await peer.setRemoteDescription(new RTCSessionDescription(offer));
-      const answer = await peer.createAnswer();
-      await peer.setLocalDescription(answer);
-      if (socket) {
-        socket.emit('answer', { answer, roomId });
-      }
-    } catch (error) {
-      console.error('Error handling offer:', error);
-    }
-  };
-
-  const handleAnswer = async ({ answer }) => {
-    const peer = peerRef.current;
-    if (!peer) {
-      console.error('Peer connection not initialized');
-      return;
-    }
-    try {
-      await peer.setRemoteDescription(new RTCSessionDescription(answer));
-    } catch (error) {
-      console.error('Error handling answer:', error);
-    }
-  };
-
-  const handleIceCandidate = async ({ candidate }) => {
-    const peer = peerRef.current;
-    if (!peer) {
-      console.error('Peer connection not initialized');
-      return;
-    }
-    if (candidate) {
-      try {
-        await peer.addIceCandidate(new RTCIceCandidate(candidate));
-      } catch (error) {
-        console.error('Error adding ICE candidate:', error);
-      }
-    }
-  };
 
   const toggleMute = () => {
     if (streamRef.current) {
@@ -185,6 +191,7 @@ const VideoConsultation = () => {
     try {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
       
       if (streamRef.current) {
@@ -193,10 +200,16 @@ const VideoConsultation = () => {
       
       if (peerRef.current) {
         peerRef.current.close();
+        peerRef.current = null;
       }
       
+      // Remove socket event listeners to prevent memory leaks
       if (socket) {
-        socket.emit('leave-video-room', roomId);
+        socket.off('user-joined', handleUserJoined);
+        socket.off('offer', handleOffer);
+        socket.off('answer', handleAnswer);
+        socket.off('ice-candidate', handleIceCandidate);
+        socket.emit('leave-video-room', roomIdRef.current || roomId);
       }
       
       await axios.post(`http://localhost:5000/api/appointments/${appointmentId}/video/end`);

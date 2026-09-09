@@ -2,6 +2,9 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { generateOTP, storeOTP, verifyOTP } = require('../utils/otp');
+const { sendOTPEmail } = require('../utils/email');
+const { sendOTPSMS } = require('../utils/sms');
 
 const router = express.Router();
 
@@ -10,13 +13,24 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
 
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+    // Validate required fields
+    if (!name || !email || !password || !phone) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Create new user
+    // Check if user exists by email
+    const existingUserByEmail = await User.findOne({ email });
+    if (existingUserByEmail) {
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
+
+    // Check if user exists by phone
+    const existingUserByPhone = await User.findOne({ phone });
+    if (existingUserByPhone) {
+      return res.status(400).json({ message: 'User with this phone number already exists' });
+    }
+
+    // Create new user (password will be hashed by pre-save hook)
     const user = new User({ name, email, password, phone });
     await user.save();
 
@@ -38,7 +52,14 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // Handle MongoDB duplicate key errors
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({ 
+        message: `User with this ${field} already exists` 
+      });
+    }
+    res.status(500).json({ message: error.message || 'Registration failed. Please try again.' });
   }
 });
 
@@ -172,6 +193,109 @@ router.put('/change-password', auth, async (req, res) => {
     res.json({ message: 'Password changed successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// OTP-based Registration/Login
+router.post('/send-otp', async (req, res) => {
+  try {
+    const { phone, email } = req.body;
+    
+    if (!phone) {
+      return res.status(400).json({ message: 'Phone number is required' });
+    }
+
+    const otp = generateOTP();
+    storeOTP(phone, otp);
+
+    // Send OTP via SMS
+    await sendOTPSMS(phone, otp);
+    
+    // Send OTP via Email if provided
+    if (email) {
+      await sendOTPEmail(email, otp);
+    }
+
+    res.json({ 
+      message: 'OTP sent successfully',
+      // In development, return OTP for testing
+      ...(process.env.NODE_ENV === 'development' && { otp })
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Verify OTP and Register/Login
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { phone, otp, name, email, role } = req.body;
+
+    if (!phone || !otp) {
+      return res.status(400).json({ message: 'Phone and OTP are required' });
+    }
+
+    // Verify OTP
+    if (!verifyOTP(phone, otp)) {
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    }
+
+    // Check if user exists
+    let user = await User.findOne({ phone });
+
+    if (!user) {
+      // Register new user
+      if (!name || !email) {
+        return res.status(400).json({ message: 'Name and email are required for registration' });
+      }
+
+      // Check if email already exists
+      const existingUserByEmail = await User.findOne({ email });
+      if (existingUserByEmail) {
+        return res.status(400).json({ message: 'User with this email already exists. Please login instead.' });
+      }
+
+      // Create new user with OTP verification
+      user = new User({
+        name,
+        email,
+        phone,
+        role: role || 'patient',
+        otpVerified: true
+      });
+      await user.save();
+    } else {
+      // Existing user - update OTP verification status
+      user.otpVerified = true;
+      await user.save();
+    }
+
+    // Generate token
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    // Handle MongoDB duplicate key errors
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({ 
+        message: `User with this ${field} already exists` 
+      });
+    }
+    res.status(500).json({ message: error.message || 'OTP verification failed. Please try again.' });
   }
 });
 

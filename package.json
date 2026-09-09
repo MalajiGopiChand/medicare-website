@@ -9,21 +9,38 @@
     "client": "cd client && npm start",
     "install-all": "npm install && cd client && npm install"
   },
-  "keywords": ["healthcare", "booking", "alerts"],
+  "keywords": [
+    "healthcare",
+    "booking",
+    "alerts"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^7.5.0",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "node-cron": "^3.0.2"
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.0",
+    "node-cron": "^3.0.2",
+    "openai": "^6.9.1",
+    "socket.io": "^4.7.2",
+    "razorpay": "^2.9.2",
+    "stripe": "^14.7.0",
+    "nodemailer": "^6.9.7",
+    "twilio": "^4.19.0",
+    "pdfkit": "^0.14.0",
+    "multer": "^1.4.5-lts.1",
+    "aws-sdk": "^2.1498.0",
+    "cloudinary": "^1.41.0",
+    "express-validator": "^7.0.1",
+    "crypto": "^1.0.1",
+    "qrcode": "^1.5.3",
+    "speech-recognition": "^0.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
-    "concurrently": "^8.2.1"
+    "concurrently": "^8.2.1",
+    "nodemon": "^3.0.1"
   }
 }
-

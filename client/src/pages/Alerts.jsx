@@ -9,6 +9,8 @@ const Alerts = () => {
 
   useEffect(() => {
     fetchAlerts();
+    const intervalId = setInterval(fetchAlerts, 30000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchAlerts = async () => {
