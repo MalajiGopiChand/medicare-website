@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const { uploadFile, uploadToCloudinary } = require('../utils/fileUpload');
+const { uploadFile, uploadToCloudinary, upload } = require('../utils/fileUpload');
 const fs = require('fs');
 
 // Upload single file

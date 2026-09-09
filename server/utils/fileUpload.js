@@ -90,6 +90,4 @@ exports.uploadFile = async (req, res, next) => {
 
 // Upload multiple files
 exports.uploadMultiple = upload.array('files', 10);
-
-module.exports = upload;
-
+exports.upload = upload;
